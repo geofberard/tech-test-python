@@ -6,8 +6,20 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    command: bash -c "pip install -r requirements.txt && python app.py"
+    command: bash -c "pip install -r requirements.txt && python run.py"
     ports:
-      - "8080:5000"
+      - "80:5000"
     environment:
+      FLASK_APP: run.py
       FLASK_ENV: development
+
+  db:
+      image: postgres:13
+      environment:
+        POSTGRES_DB: mydb
+        POSTGRES_USER: myuser
+        POSTGRES_PASSWORD: mypassword
+      ports:
+        - "5432:5432"
+      volumes:
+        - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql

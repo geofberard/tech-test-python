@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <title>Liste des Roadtrips</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='roadtrips.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Roadtrips</h1>
+
+        <ul>
+            {% for roadtrip in roadtrips %}
+            <li class="card" onclick="seeDetails({{ roadtrip.id }})">
+                {{ roadtrip.name }} 
+                <i class="fas fa-trash icon" onclick="deleteRoadtrip({{ roadtrip.id }})"></i>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div id="roadtrip-creation-button" class="form-toggle-container">
+            <button type="submit" class="form-submit" onclick="displayForm()">New Roadtrip</button>
+        </div>
+
+        <div id="roadtrip-creation-form" class="form-container">
+            <input type="text" class="form-input" id="roadtrip-name" name="name" placeholder="Roadtrip name ...">
+            <button type="submit" class="form-submit"
+                onclick="createRoadtrip($('#roadtrip-name').val())">Create</button>
+        </div>
+
+    </div>
+    <script>
+        function displayForm() {
+            $("#roadtrip-creation-button").css({ display: 'none' })
+            $("#roadtrip-creation-form").css({ visibility: 'visible' })
+            $("#roadtrip-name").focus()
+        }
+
+        function createRoadtrip(name) {
+            fetch(`/api/roadtrips`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+                .then(response => {
+                    window.location.reload();
+                });
+        }
+
+        function deleteRoadtrip(id) {
+            fetch(`/api/roadtrips/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    window.location.reload();
+                });
+        }
+
+        function seeDetails(id) {
+            window.location.href = "/roadtrip/" + id;
+        }
+    </script>
+</body>
+
+</html>

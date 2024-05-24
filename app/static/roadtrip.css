@@ -1,0 +1,92 @@
+.title-layer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-layer .icon {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.details-layer {
+    display: flex;
+    margin: 5px 0;
+    height: 280px;
+}
+
+.details-layer > div {
+    max-height: 280px;
+    overflow: scroll;
+    padding-right: 15px;
+}
+
+.city-pannel {
+    flex-basis: 60%;
+}
+
+.city-content {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.weather {
+    color: #616161;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.weather img {
+    height: 30px;
+}
+
+.guide-pannel {
+    flex-basis: 40%;
+}
+
+.guide-advice {
+    display: flex;
+    align-items: start;
+}
+
+.guide-advice img {
+    margin-top: -10px;
+    margin-left: -10px;
+}
+
+.guide-advice:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-items {
+    position: fixed;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}

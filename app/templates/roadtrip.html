@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.2.3/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.2.3/ol.css">
+    <title>{{ roadtrip.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='roadtrip.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="title-layer">
+            <i class="fas fa-arrow-left icon" onclick="goBack()"></i>
+            <h1>{{ roadtrip.name }}</h1>
+        </div>
+
+        <div id="roadtrip-map" style="width: 100%; height: 400px;"></div>
+        <script src="{{ url_for('static', filename='map.js') }}"></script>
+
+        <div class="details-layer">
+            <div class="city-pannel">
+                <ul>
+                    {% for city in roadtrip.cities %}
+                    <li class="card">
+                        <div class="city-content">
+                            {{ city.name }} ({{ city.admin_code }})
+                            <p class="weather">
+                                {{ city.weather.temp }}°C
+                                <img class="weather-icon"
+                                    src="http://openweathermap.org/img/wn/{{ city.weather.icon }}.png"
+                                    alt="{{ city.weather.description }}" title="{{ city.weather.description }}">
+                            </p>
+                        </div>
+                        <i class="fas fa-trash icon" onclick="removeCity({{ roadtrip.id }},{{ city.id }})"></i>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div id="city-association-button" class="form-toggle-container">
+                    <button type="submit" class="form-submit" onclick="displayForm()">Add City</button>
+                </div>
+
+                <div id="city-association-form" class="form-container">
+                    <input id="city-search-input" type="text" name="name" class="form-input" autocomplete="off"
+                        placeholder="Roadtrip name ...">
+                    <input id="city-search-id" type="hidden" name="city-id" value="" />
+                    <button id="city-search-submit" type="submit" class="form-submit"
+                        onclick="addCity({{ roadtrip.id }},$('#city-search-id').val())" disabled>Add</button>
+                </div>
+                <script src="{{ url_for('static', filename='city-search.js') }}"></script>
+
+            </div>
+            <div class="guide-pannel card">
+
+                {% if guides %}
+                
+                {% for guide in guides %}
+                <div class="guide-advice">
+                    <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ guide.icon }}.png"
+                        alt="{{ guide.desc }}" title="{{ guide.desc }}">
+                    {{ guide.advice }}
+                </div>
+                {% endfor %}
+                
+                {% else %}
+                
+                Add a city to see the guide ...
+                
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function goBack() {
+            window.location.href = "/";
+        }
+
+        function displayForm() {
+            $("#city-association-button").css({ display: 'none' })
+            $("#city-association-form").css({ visibility: 'visible' })
+            $("#city-search-input").focus()
+        }
+
+        function addCity(id, city_id) {
+            fetch(`/api/roadtrips/` + id + `/add_city`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ city_id: city_id })
+            })
+                .then(response => {
+                    window.location.reload();
+                });
+        }
+
+        function removeCity(id, city_id) {
+            fetch(`/api/roadtrips/` + id + `/remove_city`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ city_id: city_id })
+            })
+                .then(response => {
+                    window.location.reload();
+                });
+        }
+
+        displayMap({{ points | tojson }});
+    </script>
+</body>
+
+</html>
