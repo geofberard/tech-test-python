@@ -50,6 +50,7 @@ Both Flask and PostgreSQL are embede in the `docker-compose` environment, but Op
 
 ### Question 1 
 The current city `autocomplete` mechanism doesn't seem to propose the most efficient recommendations.
+Find a solution to display more relevant cities to the user.
 
 ![](img/python-test-question-1.png)
 
