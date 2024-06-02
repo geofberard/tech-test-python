@@ -58,9 +58,17 @@
 
             </div>
             <div class="guide-pannel card">
-
                 {% if guides %}
-                
+                <div class="advice-title">Temperature</div>
+                <div class="temp-advice">
+                    <span class="temp">{{ temp_guide.min_temp }}°C</span>
+                    <span class="advice">{{ temp_guide.min_advice }}</span>
+                    <span class="temp">{{ temp_guide.max_temp }}°C</span>
+                    <span class="advice">{{ temp_guide.max_advice }}</span>
+                    <span class="amplitude">{{ temp_guide.amplitude_advice }}</span>
+                </div>
+
+                <div class="advice-title">Weather</div>
                 {% for guide in guides %}
                 <div class="guide-advice">
                     <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ guide.icon }}.png"
@@ -68,11 +76,11 @@
                     {{ guide.advice }}
                 </div>
                 {% endfor %}
-                
+
                 {% else %}
-                
+
                 Add a city to see the guide ...
-                
+
                 {% endif %}
 
             </div>
